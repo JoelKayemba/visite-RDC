@@ -8,12 +8,14 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./styles/GlobalStyle";
 import { theme } from "./styles/theme";
 import AppRoutes from "./routes";
+import ScrollToTop from "./components/ScrollToTop"; 
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <GlobalStyle />
+        <ScrollToTop/>
         <AppRoutes />
       </BrowserRouter>
     </ThemeProvider>
