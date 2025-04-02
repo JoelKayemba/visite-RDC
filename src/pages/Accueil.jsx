@@ -1,11 +1,27 @@
 import React from "react";
 import styled from "styled-components";
-import accueilData from "../data/accueilData"
+import { motion } from "framer-motion";
+import accueilData from "../data/accueilData";
 import destinations from "../data/destinationData";
 import DestinationCard from "../components/DestinationCard";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+// ========== ANIMATION VARIANTS ===========
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+};
+
+const staggerContainer = {
+  visible: {
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+// ========== STYLED COMPONENTS ===========
 const HeroSection = styled.section`
   position: relative;
   height: 100vh;
@@ -20,11 +36,8 @@ const HeroSection = styled.section`
   &::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5); /* Sombre mais pas opaque */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
     z-index: 0;
   }
 
@@ -32,14 +45,14 @@ const HeroSection = styled.section`
     position: relative;
     z-index: 1;
   }
-    @media (max-width: 768px) {
-    
-    height:200vh;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 6rem 5% 3rem;
   }
 `;
 
-
-const TitrePrincipal = styled.h1`
+const TitrePrincipal = styled(motion.h1)`
   font-size: 4.5rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -48,12 +61,10 @@ const TitrePrincipal = styled.h1`
   @media (max-width: 768px) {
     font-size: 2.8rem;
     max-width: 100%;
-    
   }
 `;
 
-
-const Slogan = styled.p`
+const Slogan = styled(motion.p)`
   font-size: 1.4rem;
   margin-top: 1rem;
   max-width: 800px;
@@ -64,8 +75,7 @@ const Slogan = styled.p`
   }
 `;
 
-
-const InfosIntro = styled.div`
+const InfosIntro = styled(motion.div)`
   position: absolute;
   bottom: 5%;
   left: 5%;
@@ -76,13 +86,13 @@ const InfosIntro = styled.div`
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
-    flex-direction: column;
     position: static;
+    flex-direction: column;
     margin-top: 2rem;
   }
 `;
 
-const InfoBlock = styled.div`
+const InfoBlock = styled(motion.div)`
   flex: 1;
   min-width: 220px;
   font-size: 0.9rem;
@@ -94,7 +104,7 @@ const DestinationSection = styled.section`
   padding: 5rem 4%;
 `;
 
-const SectionTitre = styled.h2`
+const SectionTitre = styled(motion.h2)`
   color: white;
   text-align: center;
   font-size: 2.3rem;
@@ -102,7 +112,7 @@ const SectionTitre = styled.h2`
   text-transform: uppercase;
 `;
 
-const DestGrid = styled.div`
+const DestGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
@@ -110,7 +120,6 @@ const DestGrid = styled.div`
   @media (max-width: 768px) {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
   }
 `;
@@ -121,7 +130,7 @@ const ImmersionSection = styled.section`
   padding: 5rem 4%;
 `;
 
-const ImmersionContent = styled.div`
+const ImmersionContent = styled(motion.div)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -132,13 +141,12 @@ const ImmersionContent = styled.div`
   }
 `;
 
-
-const ImmersionTitre = styled.h2`
+const ImmersionTitre = styled(motion.h2)`
   font-size: 2rem;
   margin-bottom: 1rem;
 `;
 
-const ImmersionTexte = styled.p`
+const ImmersionTexte = styled(motion.p)`
   font-size: 0.95rem;
   max-width: 600px;
   color: ${({ theme }) => theme.couleurs.gris};
@@ -168,17 +176,25 @@ const MiniGallery = styled.div`
   }
 `;
 
-
+// ========== COMPONENT ===========
 const Accueil = () => {
   return (
     <>
       <Header />
       <HeroSection id="accueil">
-        <TitrePrincipal>{accueilData.titrePrincipal}</TitrePrincipal>
-        <Slogan>{accueilData.slogan}</Slogan>
-        <InfosIntro>
+        <TitrePrincipal initial="hidden" whileInView="visible" variants={fadeInUp}>
+          {accueilData.titrePrincipal}
+        </TitrePrincipal>
+        <Slogan initial="hidden" whileInView="visible" variants={fadeInUp}>
+          {accueilData.slogan}
+        </Slogan>
+        <InfosIntro
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+        >
           {accueilData.sectionsIntro.map((info, index) => (
-            <InfoBlock key={index}>
+            <InfoBlock key={index} variants={fadeInUp}>
               <strong>{info.titre}</strong>
               <p>{info.texte}</p>
             </InfoBlock>
@@ -187,8 +203,19 @@ const Accueil = () => {
       </HeroSection>
 
       <DestinationSection id="destinations">
-        <SectionTitre>Destinations recommandées</SectionTitre>
-        <DestGrid>
+        <SectionTitre
+          initial="hidden"
+          whileInView="visible"
+          variants={fadeInUp}
+        >
+          Destinations recommandées
+        </SectionTitre>
+
+        <DestGrid
+          initial="hidden"
+          whileInView="visible"
+          variants={staggerContainer}
+        >
           {destinations.slice(0, 4).map((dest, index) => (
             <DestinationCard
               key={index}
@@ -202,9 +229,15 @@ const Accueil = () => {
       </DestinationSection>
 
       <ImmersionSection>
-        <ImmersionContent>
-          <ImmersionTitre>Voyagez et profitez</ImmersionTitre>
-          <ImmersionTexte>
+        <ImmersionContent
+          initial="hidden"
+          whileInView="visible"
+          variants={staggerContainer}
+        >
+          <ImmersionTitre variants={fadeInUp}>
+            Voyagez et profitez
+          </ImmersionTitre>
+          <ImmersionTexte variants={fadeInUp}>
             La RDC est un pays magnifique à découvrir : ses paysages, sa musique, sa population chaleureuse et ses mystères. Laissez-vous emporter par la beauté du fleuve Congo, les sons de la rumba, et les traditions millénaires.
           </ImmersionTexte>
 
